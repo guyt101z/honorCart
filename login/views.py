@@ -25,9 +25,6 @@ def do_login():
     return "Hello World!"
 
 
-@login_bp.route('/oidLogin/')
-
-
 @oid.after_login
 def create_or_login(resp):
     user = get_user(resp.identity_url)

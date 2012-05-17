@@ -12,6 +12,7 @@ login_manager.login_view = "login.do_login"
 
 def getAnonUser():
     return User("Anonymous", "None")
+
 login_manager.anonymous_user = getAnonUser
 
 
