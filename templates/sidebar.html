@@ -1,0 +1,6 @@
+<li class="nav-header">Manage</li>
+{% include 'sidebar_maintenance.html' %}
+{% if g.categories %}
+<li class="nav-header">Sidebar</li>
+{% include 'sidebar_categories.html' %}
+{% endif %}

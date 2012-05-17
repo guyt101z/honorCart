@@ -1,0 +1,9 @@
+<li {{ 'class=active' if request.path == "/" }}><a href="/">Home</a></li>
+<li {{ 'class=active' if request.path == "/addMoney" }}><a href="/addMoney">Add Money</a></li>
+<li {{ 'class=active' if request.path == "/settings" }}><a href="/settings">Settings</a></li>
+{% if g.user and g.user.isAdmin() %}
+<li class="nav-header">Admin</li>
+<li {{ 'class=active' if request.path == "/admin" }}><a href="/admin">Admin</a></li>
+<li {{ 'class=active' if request.path == "/addItem" }}><a href="/addItem">Add Item</a></li>
+<li {{ 'class=active' if request.path == "/modifyItems" }}><a href="/modifyItems">Modify Items</a></li>
+{% endif %}

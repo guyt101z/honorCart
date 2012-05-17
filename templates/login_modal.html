@@ -1,0 +1,32 @@
+<div id="loginModal" class="modal hide fade in">
+      <div class="modal-header">
+        <h3>Log In</h3>
+      </div>
+      <form action="/login" method="post" class="form-horizontal">
+        <div class="modal-body">
+          <fieldset>
+            <div class="control-group">
+              <label for="username" class="control-label">Username: </label>
+              <div class="controls"><input type="text"></div>
+            </div>
+            <div class="control-group">
+              <label for="password" class="control-label">Password: </label>
+              <div class="controls"><input type="password"></div>
+            </div>
+          </fieldset>
+          <div class="control-group">
+            <label for="openid" class="control-label">OpenID:</label>
+            <div class="controls">
+              <button class="btn" type="submit" name="login" value="google"><img src="/static/img/google-logo.png" alt=""></button>
+              <button class="btn" type="submit" name="login" value="yahoo"><img src="/static/img/yahoo-logo.png" alt=""></button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <fieldset>
+            <button type="submit" class="btn btn-primary" name="login" value="noOpenId">Log In</button>
+          </fieldset>
+        </div>
+      </form>
+    </div>
