@@ -1,10 +1,20 @@
 from flask import Flask, render_template
-from login import login_bp
+import login
+import admin
+import settings
+from flaskext.login import current_user
 
 
 app = Flask(__name__)
-app.register_blueprint(login_bp)
-DEBUG = True
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+app.register_blueprint(login.login_bp)
+login.models.init_oid(app)
+login.models.init_login(app)
+
+app.register_blueprint(admin.admin_bp)
+
+app.register_blueprint(settings.settings_bp)
 
 
 @app.route("/")

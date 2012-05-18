@@ -20,6 +20,8 @@
     </style>
     <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
 
+    <script src="../static/js/jquery.js"></script>
+
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -64,6 +66,22 @@
 
         </div><!--/span-->
         <div class="span9">
+          <div class="row-fluid">
+            <div class="span9">
+              {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category == 'error' or category == 'info' or category == 'success' %}
+                      <div class="alert alert-{{category}}">
+                        <button class="close" data-dismiss="alert">x</button>
+                        {{message|safe}}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+            </div>
+          </div>
           {% block content %}
             <div class="hero-unit">
 
@@ -88,7 +106,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../static/js/jquery.js"></script>
     <script src="../static/js/bootstrap-transition.js"></script>
     <script src="../static/js/bootstrap-alert.js"></script>
     <script src="../static/js/bootstrap-modal.js"></script>
@@ -104,8 +121,11 @@
 
     <script type="text/javascript">
       $(document).ready(function () {
+        {% if current_user.is_anonymous() and disable_login != true%}
         $('#loginModal').modal({'backdrop': 'static'});
-        //$('#loginModal').modal({show: false});
+        {% else %}
+        $('#loginModal').modal({show: false});
+        {% endif %}
       });
     </script>
 

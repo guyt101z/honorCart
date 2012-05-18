@@ -6,12 +6,12 @@
 <a class="brand" href="#">LVL1 Store</a>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-    <i class="icon-user"></i> {{ "%s" % g.user.name if g.user is defined else "Anonymous" }}
+    <i class="icon-user"></i> {{ "%s" % current_user.username if current_user.username is defined else "Anonymous" }}
     <span class="caret"></span>
   </a>
 
   <ul class="dropdown-menu">
-    {% if g.user is defined %}
+    {% if current_user is defined %}
     <li><a href="/settings">Settings</a></li>
     <li class="divider"></li>
     <li><a onClick="$('#loginModal').modal('show');" href="/logout">Sign Out</a></li>
@@ -24,7 +24,7 @@
 <div class="nav pull-right">
   <ul class="nav">
     <li {{ 'class=active' if request.path == "/addMoney" }}><a href="/addMoney">Balance: </a></li>
-    <li><p class="navbar-text">{{ "$%.2f" % g.user.balance if g.user is defined else "$%.2f" % 0 }}</p></li>
+    <li><p class="navbar-text">{{ "$%.2f" % current_user.balance if current_user.username is defined else "$%.2f" % 0 }}</p></li>
   </ul>
 </div>
 

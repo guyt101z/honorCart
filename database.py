@@ -9,11 +9,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataStore.db'
 
 db = SQLAlchemy(app)
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    openid = db.Column(db.String(4095))
+    username = db.Column(db.String(80))
+    email = db.Column(db.String(120))
+    openid = db.Column(db.String(4095), unique=True)
     admin = db.Column(db.Boolean)
     verified = db.Column(db.Boolean)
     balance = db.Column(db.Float)
@@ -63,7 +64,7 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def checkPassword(self, password):
-        return check_password_hash(self.pw_hash, password)
+        return check_password_hash(self.password_hash, password)
 
     def get_id(self):
         """
@@ -71,7 +72,7 @@ class User(db.Model):
         that and convert it to `unicode`.
         """
         try:
-            return unicode(self.openid)
+            return unicode(self.id)
         except AttributeError:
             raise NotImplementedError("No `id` attribute - override get_id")
 
@@ -132,7 +133,7 @@ class PriceBreak(db.Model):
 if __name__ == '__main__':
     db.drop_all()
     db.create_all()
-    admin = User("Admin", "admin@example.com", admin=True)
+    admin = User("admin", "admin@example.com", admin=True)
     admin.setPassword("admin")
     db.session.add(admin)
     db.session.commit()
