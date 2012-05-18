@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import login
 import admin
 import settings
+import items
 from flaskext.login import current_user
 
 
@@ -16,6 +17,8 @@ app.register_blueprint(admin.admin_bp)
 
 app.register_blueprint(settings.settings_bp)
 
+app.register_blueprint(items.items_bp)
+
 
 @app.route("/")
 def main():
@@ -25,11 +28,6 @@ def main():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
-
-
-@app.route("/addItem")
-def addItemTest():
-    return render_template("addItem.html")
 
 
 @app.route("/rules")

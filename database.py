@@ -84,7 +84,8 @@ class Item(db.Model):
     price = db.Column(db.Float)
     inStock = db.Column(db.Integer)
     picture = db.Column(db.String(1024))
-    category = db.relationship('Category', backref="item", lazy='dynamic', uselist=False)
+    category = db.relationship('Category', backref="items", lazy='dynamic')
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
     pricebreaks = db.relationship('PriceBreak', backref="item", lazy='dynamic')
 
@@ -108,8 +109,6 @@ class Item(db.Model):
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 
     def __init__(self, name):
         self.name = name
