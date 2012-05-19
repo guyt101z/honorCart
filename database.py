@@ -77,6 +77,17 @@ class User(db.Model):
             raise NotImplementedError("No `id` attribute - override get_id")
 
 
+class Config(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    max_tab = db.Column(db.Float)
+
+    def __init__(self, max_tab):
+        self.max_tab = max_tab
+
+    def __repr__(self):
+        return '<Config %r>' % self.max_tab
+
+
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
@@ -84,20 +95,18 @@ class Item(db.Model):
     price = db.Column(db.Float)
     inStock = db.Column(db.Integer)
     picture = db.Column(db.String(1024))
-    category = db.relationship('Category', backref="items", lazy='dynamic')
+    category = db.relationship('Category', backref="items")
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
-    pricebreaks = db.relationship('PriceBreak', backref="item", lazy='dynamic')
+    pricebreaks = db.relationship('Pricebreak', backref="item", lazy='dynamic')
 
-    def __init__(self, name, description, price, inStock, picture, category, warning=None):
+    def __init__(self, name, description, price, inStock, picture, category):
         self.name = name
         self.description = description
         self.price = price
         self.inStock = inStock
         self.picture = picture
         self.category = category
-        if(warning is not None):
-            self.warning = warning
 
     def __repr__(self):
         return '<Item %r, %r>' % (self.name, self.category)
@@ -117,16 +126,15 @@ class Category(db.Model):
         return '<Category %r>' % self.name
 
 
-class PriceBreak(db.Model):
+class Pricebreak(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     qty = db.Column(db.Integer)
     percent = db.Column(db.Float)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 
-    def __init__(self, qty, percent, item_id):
+    def __init__(self, qty, percent):
         self.qty = qty
         self.percent = percent
-        self.item_id = item_id
 
 
 if __name__ == '__main__':
@@ -135,4 +143,6 @@ if __name__ == '__main__':
     admin = User("admin", "admin@example.com", admin=True)
     admin.setPassword("admin")
     db.session.add(admin)
+    config = Config(-25.)
+    db.session.add(config)
     db.session.commit()
