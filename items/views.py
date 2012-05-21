@@ -1,21 +1,9 @@
 from items import items_bp
 from flask import render_template, request, flash, redirect, url_for, jsonify
 from flaskext.login import login_required, current_user
-from werkzeug import secure_filename
-import os
 from models import get_categories, validate_item, create_category, create_new_item
 from models import get_items, get_item, update_item_description, get_pricebreaks, update_pricebreaks
-from models import split_form_data, update_item
-
-from PIL import Image
-
-UPLOAD_FOLDER = 'static/uploads/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+from models import split_form_data, update_item, upload_image
 
 
 @items_bp.route('/addItem', methods=['GET', 'POST'])
@@ -37,19 +25,8 @@ def add_item():
 
         saveFilePath = None
         file = request.files['picture']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            try:
-                file.save(os.path.join(UPLOAD_FOLDER, filename))
-            except IOError:
-                errors['file'] = "File failed to upload."
-            saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
-            img = Image.open(saveFilePath)
-            wpercent = (120. / float(img.size[0]))
-            hsize = int((float(img.size[1]) * float(wpercent)))
-            img = img.resize((120, hsize), Image.ANTIALIAS)
-            img.save(UPLOAD_FOLDER + 'thumbs/' + filename)
-
+        imageErrors = upload_image(file)
+        errors.update(imageErrors)
 
         if errors == {}:
             cat_id = request.form.get('category')
@@ -126,13 +103,8 @@ def edit_description():
 
     saveFilePath = None
     file = request.files.get('picture')
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        try:
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-        except IOError:
-            flash("File failed to upload.", 'errors')
-        saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
+    if file:
+        upload_image(file)
         update_item_description(request.form.get('id'),
             request.form.get('desc'), saveFilePath)
     else:

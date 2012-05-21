@@ -1,4 +1,8 @@
 from database import db, Item, Category, Pricebreak
+from werkzeug import secure_filename
+import os
+
+from PIL import Image
 
 
 def get_categories():
@@ -137,3 +141,28 @@ def update_item(id, name, price, qty, catId):
     item.category = Category.query.filter_by(id=catId).first()
     db.session.add(item)
     db.session.commit()
+
+UPLOAD_FOLDER = 'static/uploads/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def upload_image(file):
+    errors = {}
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        try:
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+        except IOError:
+            errors['file'] = "File failed to upload."
+        saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
+        img = Image.open(saveFilePath)
+        wpercent = (120. / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        img = img.resize((120, hsize), Image.ANTIALIAS)
+        img.save(UPLOAD_FOLDER + 'thumbs/' + filename)
+    return errors
