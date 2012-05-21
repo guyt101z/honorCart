@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash, \
@@ -114,7 +114,6 @@ class Item(db.Model):
     def __str__(self):
         return '<Item %r, %r>' % (self.name, self.category)
 
-
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
@@ -124,7 +123,6 @@ class Category(db.Model):
 
     def __repr__(self):
         return '<Category %r>' % self.name
-
 
 class Pricebreak(db.Model):
     id = db.Column(db.Integer, primary_key=True)
