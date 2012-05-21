@@ -1,0 +1,14 @@
+{% macro pricebreak(thresh=None, pct=None, error=None) %}
+<div class="control-group {{ 'error' if error }}">
+	<label for="pricebreak" class="control-label">Pricebreak: </label>
+	<div class="controls">
+		<input name="pbThresh" class="input-medium" placeholder="Quantity Threshold" type="text" {{ {'value': thresh}|xmlattr if thresh }}>
+		<input name="pbPct" class="input-medium" placeholder="% Off" type="text" {{ {'value': pct}|xmlattr if pct }}>
+		{% if error %}
+			<span class="help-inline">{{error.get('pct', '')}}</span>
+			<span class="help-inline">{{error.get('thresh', '')}}</span>
+		{% endif %}
+		<a href="#" class="btn delete_pricebreak"><i class="icon-trash"></i></a>
+	</div>
+</div>
+{% endmacro %}

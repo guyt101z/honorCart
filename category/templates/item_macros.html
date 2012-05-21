@@ -1,0 +1,11 @@
+{% macro display_item(item) %}
+<li class="" style="width: 160px; float: left; margin-bottom: 15px;">
+	<div class="item-info btn" style="width: 120px;">
+		<div><img src="" alt=""></div>
+		<div class=""><strong>{{item.name}}</strong></div>
+		<div class="">{{'$%.2f' % item.price}}</div>
+		<div class="">In Stock: {{item.inStock}}</div>
+	</div>
+	<div class=""><a href="" class="btn btn-success" style="width: 120px;">Add To Cart</a></div>
+</li>
+{% endmacro %}

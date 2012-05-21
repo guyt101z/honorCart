@@ -1,0 +1,15 @@
+<form action="" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="control-group">
+			<label for="name" class="control-label">Name: </label>
+			<div class="controls"><input name="name" type="text" value="{{current_user.username}}"></div>
+		</div>
+		<div class="control-group">
+			<label for="email" class="control-label">E-Mail Address: </label>
+			<div class="controls"><input name="email" type="text" value="{{current_user.email}}"></div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" type="submit">Submit</button>
+		</div>
+	</fieldset>
+</form>

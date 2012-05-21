@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% from 'pricebreak_macros.html' import pricebreak %}
+{% macro itemrow(item) %}
+	<tr>
+		<td>
+			<input type="text" class="input-medium" name="{{item.id}}-name" value="{{item.name}}">
+		</td>
+		<td style="text-align: center;">
+			<a href="#" class="btn edit-desc" data-id="{{item.id}}"><i class="icon-edit"></i></a>
+		</td>
+		<td>
+			<input type="text" class="input-small" name="{{item.id}}-price" value="{{ '%.2f' % item.price}}">
+		</td>
+		<td>
+			<input type="text" name="{{item.id}}-qty" class="input-mini" value="{{item.inStock}}">
+		</td>
+		<td>
+			<select name="{{item.id}}-categories" id="catSelect">
+				{% if categories %}
+					{% for category in categories %}
+						<option value="{{category.id}}" {{ 'selected' if item.category.id == category.id }}>{{category.name}}</option>
+					{% endfor %}
+				{% endif %}
+		</td>
+		<td style="text-align: center;">
+			<a href="#" class="btn open-pricebreaks" data-id="{{item.id}}"><i class="icon-th-list"></i></a>
+		</td style="text-align: center;">
+		<td>
+			<a href="#" class="btn delete-item" data-id="{{item.id}}"><i class="icon-trash"></i></a>
+		</td>
+	</tr>
+{% endmacro %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span5">
+		<form class="form-inline">
+			<label class="control-label" for="filter">Filter by Category: </label>
+			<select name="filter" id="filter">
+				<option value="-1"></option>
+				{% if categories %}
+					{% for category in categories %}
+						<option value="{{category.id}}" {{ 'selected' if request.args.get('filter') == category.id|string }}>{{category.name}}</option>
+					{% endfor %}
+				{% endif %}
+			</select>
+		</form>
+	</div>
+	<div class="span5">
+		<form id="addCatForm" class="form-inline" method="post" action="/modifyItems/addCategory">
+			<label for="addCat" class="control-label">Add Category: </label>
+			<input name="addCat" type="text">
+			<button type="submit" id="addCat" class="btn"><i class="icon-plus"></i></a>
+		</form>
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span9">
+		<form class="form-inline" action="" method="POST">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Item Name</th>
+						<th>Description</th>
+						<th>Price</th>
+						<th>Quantity In Stock</th>
+						<th>Category</th>
+						<th>Pricebreaks</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+						{{ itemrow(item) }}
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">Submit Changes</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% include 'modal_base.html' %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('select#filter').change(function () {
+			$(this).parent('form').submit();
+		});
+		$('a.edit-desc').click(function (e) {
+			e.preventDefault();
+			$.get('/modifyItems/getEditModalContent', {'modal': 'description', 'id': $(this).data('id')}, function(data) {
+				$('#editContentModal .modal-body').html(data);
+				$('#editContentModal #modalHead').html("Update Description");
+				$('#editContentModal #confirm').html("Update Description");
+				$('#editContentModal').data('id', $(this).data('id')).data('update', 'desc').modal('show');
+			});
+		});
+		$('a.open-pricebreaks').click(function (e) {
+			e.preventDefault();
+			$.get('/modifyItems/getEditModalContent', {'modal': 'pricebreaks', 'id': $(this).data('id')}, function(data){
+				$('#editContentModal .modal-body').html(data);
+				$('#editContentModal #modalHead').html("Update Pricebreaks");
+				$('#editContentModal #confirm').html("Update Pricebreaks");
+				$('#editContentModal').data('update', 'pricebreaks').modal('show').data('id', $(this).data('id'));
+			});
+		});
+	});
+</script>
+{% endblock %}

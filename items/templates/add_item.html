@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% from 'pricebreak_macros.html' import pricebreak %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span9">
+		<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+			<fieldset>
+				<div class="control-group {{'error' if 'name' in error_list}}">
+					<label for="name" class="control-label">Item Name: </label>
+					<div class="controls">
+						<input name="name" type="text" value="{{formdata.get('name', default='')}}"}>
+						{% if 'name' in error_list %}
+							<span class="help-inline">{{error_list['name']}}</span>
+						{% endif %}
+					</div>
+				</div>
+				<div class="control-group {{'error' if 'price' in error_list}}">
+					<label for="price" class="control-label">Item Price: </label>
+					<div class="controls">
+						<input name="price" type="text" value="{{formdata.get('price', default='')}}">
+						{% if 'price' in error_list %}
+							<span class="help-inline">{{error_list['price']}}</span>
+						{% endif %}
+					</div>
+				</div>
+				<div class="control-group {{'error' if 'qty' in error_list}}">
+					<label for="qty" class="control-label">Quantity in stock: </label>
+					<div class="controls">
+						<input name="qty" type="text" value="{{formdata.get('qty', default='')}}">
+						{% if 'qty' in error_list %}
+							<span class="help-inline">{{error_list['qty']}}</span>
+						{% endif %}
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="category" class="control-label">Select Category: </label>
+					<div class="controls">
+						<select name="category" id="catSelect">
+							<option value="-1">Add New Category</option>
+							{% if categories %}
+								{% for category in categories %}
+									<option value="{{category.id}}" {{'selected' if formdata.get('category') == category.id|string}}>{{category.name}}</option>
+								{% endfor %}
+							{% endif %}
+						</select>
+					</div>
+				</div>
+				<div id="addCatGroup" class="control-group {{'error' if 'addCat' in error_list}}">
+					<label for="addCategory" class="control-label">Add a category: </label>
+					<div class="controls">
+						<input {{ 'disabled' if formdata.get('category') != -1}} name="addCategory" id="addCat" type="text" value="{{formdata.get('addCategory', default='')}}">
+						{% if 'addCat' in error_list %}
+							<span id="addCatErrorHelp" class="help-inline">{{error_list['addCat']}}</span>
+						{% endif %}
+						<span class="help-inline" id="addCatHelp" style="display: none;">Enter a new category name</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="desc" class="control-label">Description: </label>
+					<div class="controls">
+						<textarea name="desc" id="desc" cols="80" rows="10" class="span9">{{ formdata.get('desc', '') }}</textarea>
+						<p class="help-text">HTML Allowed</p>
+					</div>
+				</div>
+				<div class="control-group {{'error' if 'file' in error_list}}">
+					<label for="upload" class="control-label">Upload a Picture: </label>
+					<div class="controls">
+						<input name="picture" type="file">
+						{% if 'file' in error_list %}
+							<span class="help-inline">{{error_list['file']}}</span>
+						{% endif %}
+					</div>
+				</div>
+				<div id="addPb" class="control-group" style="text-align: center;">
+					<a class="btn" id="addBreak" href="#">Add Pricebreak</a>
+				</div>
+				{% if pricebreaks %}
+					{% for thresh, pct in pricebreaks %}
+						{% if error_list.get('pricebreak', {}).get(loop.index0) %}
+							{{ pricebreak(thresh, pct, error=error_list.get('pricebreak', {}).get(loop.index0)) }}
+						{% else %}
+							{{ pricebreak(thresh, pct) }}
+						{% endif %}
+						
+					{% endfor %}
+				{% endif %}
+				
+				<div id="submit" class="form-actions">
+					<button class="btn btn-primary" type="submit">Add Item</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		categoryDimmer();
+		$('#catSelect').change(categoryDimmer);
+		var i = 0;
+		$('#addBreak').click(function (e) {
+			e.preventDefault();
+			$('#submit').before({{ pricebreak()|tojson|safe }});
+			i++;
+		});
+	$('form').on('click', '.delete_pricebreak', function(e) {
+		e.preventDefault();
+		$(this).parents('.control-group').fadeOut(500, function () { $(this).remove(); });
+	});
+
+	});
+	function categoryDimmer() {
+		if($('#catSelect').val() !== '-1') {
+			disable_errors();
+		} else {
+			enable_errors();
+		}
+	}
+	function enable_errors() {
+		$('#addCat').prop('disabled', false);
+		$('#addCatGroup').addClass('warning');
+		$('#addCatHelp').show();
+	}
+	function disable_errors() {
+		$('#addCat').val('');
+		$('#addCat').prop('disabled', true);
+		$('#addCatGroup').removeClass('warning');
+		$('#addCatHelp').hide();
+		$('#addCatErrorHelp').hide();
+		{% if 'addCat' in error_list %}
+			$('#addCatGroup').removeClass('error');
+		{% endif %}
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span9">
+		{% if current_user.openid == None %}
+		 	{% include 'non_open_id_form.html' %}
+		{% else %}
+			{% include 'open_id_form.html' %}
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

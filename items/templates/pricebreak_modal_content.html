@@ -1,0 +1,28 @@
+{% from 'pricebreak_macros.html' import pricebreak %}
+<form class="form-horizontal" id="pbUpdate">
+	<fieldset>
+		<input type="hidden" name="id" value="{{id}}">
+		{% if pricebreaks %}
+			{% for break in pricebreaks %}
+				{{ pricebreak(break.qty, break.percent) }}
+			{% endfor %}
+		{% endif %}
+		<div id="addPb" class="control-group" style="text-align: center;">
+			<a class="btn" id="addBreak" href="#">Add Pricebreak</a>
+		</div>
+	</fieldset>
+</form>
+<script type="text/javascript">
+$(document).ready(function (){
+	$('#addBreak').click(function (e) {
+		e.preventDefault();
+		$('#addPb').after({{ pricebreak()|tojson|safe }});
+		i++;
+	});
+	$('form#pbUpdate').on('click', '.delete_pricebreak', function(e) {
+		e.preventDefault();
+		$(this).parents('.control-group').fadeOut(500, function () { $(this).remove(); });
+	});
+
+});
+</script>
