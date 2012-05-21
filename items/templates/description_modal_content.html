@@ -1,0 +1,29 @@
+<div class="preview">
+	<h4>Preview:</h4>
+	<p>
+	{% if item.picture %}
+		<img src="{{item.picture}}" alt="">
+	{% else %}
+		No Image Uploaded Yet!
+	{% endif %}
+	</p><p>
+		{{ item.description|safe }}
+	</p>
+</div>
+<hr>
+<div class="edit">
+	<h4>Edit:</h4>
+	<form class="form-horizontal" id="descUpdate">
+		<fieldset>
+			<input type="hidden" name="id" value="{{item.id}}">
+			<div class="control-group">
+				<label for="desc" class="control-label">Desciption: </label>
+				<div class="controls"><textarea name="desc" id="desc" cols="30" rows="10">{{item.description}}</textarea></div>
+			</div>
+			<div class="control-group">
+				<label for="picture" class="control-label">Upload a Picture: </label>
+				<div class="controls"><input type="file" name="picture"></div>
+			</div>
+		</fieldset>
+	</form>
+</div>

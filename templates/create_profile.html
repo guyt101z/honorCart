@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+
+<div id="profileModal" class="modal hide fade in">
+  <div class="modal-header">
+    <h3>Create Profile</h3>
+  </div>
+  <form action="" id="profileForm" method="post" class="form-horizontal">
+    <div class="modal-body">
+      <fieldset>
+        <div class="control-group">
+            <label for="name" class="control-label">Name: </label>
+            <div class="controls"><input name="name" type="text" value="{{ request.values.name }}"></div>
+        </div>
+        <div class="control-group">
+            <label for="email" class="control-label">E-Mail Address: </label>
+            <div class="controls">
+              <input name="email" value="{{ request.values.email }}" type="text">
+            </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="modal-footer">
+      <fieldset>
+        <button type="submit" class="btn btn-primary" name="create">Create Profile</button>
+      </fieldset>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#profileModal').modal({'show': true, 'backdrop': 'static'});
+});
+</script>
+
+
+{% endblock %}

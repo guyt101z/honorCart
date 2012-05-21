@@ -1,0 +1,39 @@
+<form class="form-horizontal" id="site-admin">
+	<fieldset>
+		<div id="max_tab_group" class="control-group">
+			<label for="maxDebt" class="control-label">Maximum Tab: </label>
+			<div class="controls">
+				<div class="input-prepend">
+					<span class="add-on">$</span>
+					<input name="max_tab" type="text" value={{ '%.2f' % config.max_tab }}>	
+				</div>
+				<p class="help-block">How much debt can users run up?</p>
+				<p class="help-block" id="max-err"></p>
+			</div>
+		</div>
+	</fieldset>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#site-admin').keyup(function (e) {
+				$.post('/admin/updateConfig', $('#site-admin').serialize(), function (data) {
+					if (data.status === 'failure') {
+						if (data.errors.hasOwnProperty('error')) {
+							$('#max_tab_group').addClass('error');
+							$('#max_tab_group').removeClass('warning');
+							$('#max-err').html(data.errors.error);
+						}
+						if (data.errors.hasOwnProperty('warning')) {
+							$('#max_tab_group').addClass('warning');
+							$('#max_tab_group').removeClass('error');
+							$('#max-err').html(data.errors.warning);
+						}
+					} else {
+						$('#max_tab_group').removeClass('warning');
+						$('#max_tab_group').removeClass('error');
+						$('#max-err').html('');
+					}
+				});
+			});
+		});
+	</script>
+</form>

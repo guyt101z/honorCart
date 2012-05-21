@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span12 well">
+		<ul id="admin-tabs" class="nav nav-tabs">
+			<li><a href="#site" data-toggle="tab">Site Settings</a></li>
+			<li><a href="#users" data-toggle="tab">User Settings</a></li>
+		</ul>
+		<div class="tab-content" id="admin-tab-content">
+			<div class="tab-pane fade" id="site">
+				{% include 'site_admin_pane.html' %}	
+			</div>
+			<div class="tab-pane fade" id="users">
+				{% include 'user_admin_pane.html' %}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		console.log('a[href$="' + window.location.hash + '"]');
+		$('#admin-tabs a:last').tab('show');
+		$('a[href$="' + window.location.hash + '"]').tab('show');
+		$('#admin-tabs a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+		});
+		//$('#admin-tabs a:last').tab('show');
+	});
+</script>
+{% endblock %}

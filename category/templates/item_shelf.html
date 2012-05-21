@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% from 'item_macros.html' import display_item %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span9">	
+		<ul class="unstyled">
+		{% for item in items %}
+			{{display_item(item)}}
+			{{display_item(item)}}
+			{{display_item(item)}}
+			{{display_item(item)}}
+			{{display_item(item)}}
+			{{display_item(item)}}
+		{% endfor %}
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+	$('.badge').tooltip();
+});
+</script>
+{% endblock %}

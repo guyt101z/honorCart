@@ -1,0 +1,23 @@
+<form action="" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="control-group">
+			<label for="name" class="control-label">Name: </label>
+			<div class="controls"><input type="text" value="{{current_user.username}}" readonly></div>
+		</div>
+		<div class="control-group">
+			<label for="email" class="control-label">E-Mail Address: </label>
+			<div class="controls"><input name="email" type="text" value="{{current_user.email}}"></div>
+		</div>
+		<div class="control-group">
+			<label for="password1" class="control-label">New Password: </label>
+			<div class="controls"><input name="password1" type="password"></div>
+		</div>
+		<div class="control-group">
+			<label for="password2" class="control-label">Confirm Password: </label>
+			<div class="controls"><input name="password2" type="password"></div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" type="submit">Submit</button>
+		</div>
+	</fieldset>
+</form>
