@@ -17,11 +17,20 @@
 </div>
 
 {% include 'item_info_modal.html' %}
+{% include 'item_alert_modal.html' %}
 
 <script type="text/javascript">
 $(document).ready(function () {
 	$('.badge').tooltip();
 	$('#itemInfoModal').modal({'show': false});
+	$('#itemAlertModal').modal({'show': false});
+
+	$('a.item-alert').click(function (e) {
+		e.preventDefault();
+
+		$('#itemAlertModal form input[name="item-id"]').val($(this).data('id'));
+		$('#itemAlertModal').modal('show');
+	});
 
 	$('a.item-info').click(function (e) {
 		var that = this;

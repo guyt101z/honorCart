@@ -16,3 +16,10 @@ def display_shelf(catid):
 def get_item_info_modal_content():
     item_id = request.args.get('item_id')
     return render_template('item_info_modal_content.html', item=get_item(item_id))
+
+
+@category_bp.route('/category/alertShopkeep', methods=['POST'])
+@login_required
+def alert_shopkeep():
+    flash('Thanks for alerting the shop keeper!', 'success')
+    return redirect(request.referrer)

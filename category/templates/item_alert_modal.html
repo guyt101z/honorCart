@@ -1,0 +1,47 @@
+<div id="itemAlertModal" class="modal hide fade in">
+  <div class="modal-header">
+  	<button class="close" data-dismiss="modal">×</button>
+    <h3>Problem?</h3>
+  </div>
+  <div class="modal-body">
+    <h3>What's up?</h3>
+    <form id="problemForm" action="alertShopkeep" method="post" class="form-horizontal">
+      <fieldset>
+        <div class="control-group">
+          <label for="probType" class="control-label">Problem Type: </label>
+          <div class="controls">
+            <select name="probType" id="probType">
+              <option value="-1">Select Problem Type</option>
+              <option value="0">Out of Item</option>
+              <option value="1">Item Misplaced</option>
+              <option value="2">Missing Parts</option>
+              <option value="3">General Malaise</option>
+            </select>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="probDesc" class="control-label">Problem Description:</label>
+          <div class="controls">
+            <textarea name="probDesc" id="" cols="40" rows="10"></textarea>
+          </div>
+        </div>
+        <input type="hidden" name="user-id">
+        <input type="hidden" name="item-id" value="{{ current_user.id }}">
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+  	<a href="" id="sendReport" class="btn btn-primary">Report Problem</a>
+    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+  </div>
+
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+  $('a#sendReport').click(function (e) {
+    e.preventDefault();
+    $('form#problemForm').submit();
+  });
+});
+</script>
