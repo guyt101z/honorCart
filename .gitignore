@@ -36,3 +36,4 @@ nosetests.xml
 nonces/
 associations/
 static/uploads/
+search_index/
