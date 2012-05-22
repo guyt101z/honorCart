@@ -11,11 +11,11 @@
           <label for="probType" class="control-label">Problem Type: </label>
           <div class="controls">
             <select name="probType" id="probType">
-              <option value="-1">Select Problem Type</option>
-              <option value="0">Out of Item</option>
-              <option value="1">Item Misplaced</option>
-              <option value="2">Missing Parts</option>
-              <option value="3">General Malaise</option>
+              <option value="select">Select Problem Type</option>
+              <option value="out">Out of Item</option>
+              <option value="misplaced">Item Misplaced</option>
+              <option value="missing_parts">Missing Parts</option>
+              <option value="general">General Malaise</option>
             </select>
           </div>
         </div>
@@ -25,8 +25,8 @@
             <textarea name="probDesc" id="" cols="40" rows="10"></textarea>
           </div>
         </div>
-        <input type="hidden" name="user-id">
-        <input type="hidden" name="item-id" value="{{ current_user.id }}">
+        <input type="hidden" name="user-id" value="{{ current_user.id }}">
+        <input type="hidden" name="item-id">
       </fieldset>
     </form>
   </div>

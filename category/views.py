@@ -1,7 +1,7 @@
 from category import category_bp
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flaskext.login import login_required, current_user
-from models import get_items, get_item
+from models import get_items, get_item, send_admin_alert
 
 
 @category_bp.route('/category/<int:catid>')
@@ -21,5 +21,14 @@ def get_item_info_modal_content():
 @category_bp.route('/category/alertShopkeep', methods=['POST'])
 @login_required
 def alert_shopkeep():
+    category = request.form.get('probType')
+    comments = request.form.get('probDesc')
+    userid = request.form.get('user-id')
+    itemid = request.form.get('item-id')
+    print category
+    print comments
+    print userid
+    print itemid
+    send_admin_alert(category, itemid, userid, comments)
     flash('Thanks for alerting the shop keeper!', 'success')
     return redirect(request.referrer)
