@@ -9,11 +9,11 @@ def get_categories():
     return Category.query.all()
 
 
-def create_new_item(name, desc, price, qty, catId, image, pricebreaks):
+def create_new_item(name, desc, price, qty, catId, image, pricebreaks, thumb=None):
     print "trying to create item"
     category = Category.query.filter_by(id=catId).first()
 
-    new_item = Item(name, desc, price, qty, image, category)
+    new_item = Item(name, desc, price, qty, image, category, thumb)
     for thresh, pct in pricebreaks:
         new_item.pricebreaks.append(Pricebreak(thresh, pct))
     db.session.add(new_item)
@@ -160,9 +160,10 @@ def upload_image(file):
         except IOError:
             errors['file'] = "File failed to upload."
         saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
+        saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', filename)
         img = Image.open(saveFilePath)
         wpercent = (120. / float(img.size[0]))
         hsize = int((float(img.size[1]) * float(wpercent)))
         img = img.resize((120, hsize), Image.ANTIALIAS)
-        img.save(UPLOAD_FOLDER + 'thumbs/' + filename)
-    return errors
+        img.save(saveThumbPath)
+    return {'errors': errors, 'image': saveFilePath, 'thumb': saveThumbPath}

@@ -23,10 +23,9 @@ def add_item():
         errors = validate_item(request.form.get('name'), request.form.get('price'), request.form.get('qty'),
             request.form.get('addCategory'), pricebreaks)
 
-        saveFilePath = None
         file = request.files['picture']
-        imageErrors = upload_image(file)
-        errors.update(imageErrors)
+        rv = upload_image(file)
+        errors.update(rv.get('errors'))
 
         if errors == {}:
             cat_id = request.form.get('category')
@@ -34,7 +33,7 @@ def add_item():
             if int(cat_id) == -1:
                 cat_id = create_category(request.form.get('addCategory'))
             create_new_item(request.form.get('name'), request.form.get('desc'), request.form.get('price'),
-                request.form.get('qty'), cat_id, saveFilePath, pricebreaks)
+                request.form.get('qty'), cat_id, rv.get('image'), pricebreaks, rv.get('thumb'))
             formdata.clear()
             pricebreaks = ()
             flash(u'<strong>Congratulations!</strong> Item was added successfully!', 'success')
