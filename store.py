@@ -1,14 +1,17 @@
 from flask import Flask, render_template, g
-from database import Category
+from database import db, Item, Category, init_db_app
 import login
 import admin
 import settings
 import items
 import category
+import search
 from global_mail import init_mail
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+init_db_app(app)
 
 init_mail(app)
 
@@ -20,6 +23,20 @@ app.register_blueprint(admin.admin_bp)
 app.register_blueprint(settings.settings_bp)
 app.register_blueprint(items.items_bp)
 app.register_blueprint(category.category_bp)
+app.register_blueprint(search.search_bp)
+
+
+# dirty hack to get around issues in whoosh
+@app.before_first_request
+def test():
+    item = Item.query.first()
+    item.inStock -= 1
+    db.session.add(item)
+    db.session.commit()
+    item.inStock += 1
+    db.session.add(item)
+    db.session.commit()
+    print "Test!"
 
 
 @app.before_request

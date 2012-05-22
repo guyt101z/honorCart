@@ -1,13 +1,18 @@
+from __future__ import with_statement
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+import flask.ext.whooshalchemy
 
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataStore.db'
+db = SQLAlchemy()
 
-db = SQLAlchemy(app)
+
+def init_db_app(app):
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataStore.db'
+    app.config['WHOOSH_BASE'] = 'search_index'
+    db.init_app(app)
 
 
 class User(db.Model):
@@ -89,6 +94,8 @@ class Config(db.Model):
 
 
 class Item(db.Model):
+    __searchable__ = ['name', 'description']
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(16383))
@@ -116,6 +123,7 @@ class Item(db.Model):
     def __str__(self):
         return '<Item %r, %r>' % (self.name, self.category)
 
+
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
@@ -125,6 +133,7 @@ class Category(db.Model):
 
     def __repr__(self):
         return '<Category %r>' % self.name
+
 
 class Pricebreak(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -138,11 +147,14 @@ class Pricebreak(db.Model):
 
 
 if __name__ == '__main__':
-    db.drop_all()
-    db.create_all()
-    admin = User("admin", "admin@example.com", admin=True)
-    admin.setPassword("admin")
-    db.session.add(admin)
-    config = Config(-25.)
-    db.session.add(config)
-    db.session.commit()
+    app = Flask(__name__)
+    init_db_app(app)
+    with app.test_request_context():
+        db.drop_all()
+        db.create_all()
+        admin = User("admin", "admin@example.com", admin=True)
+        admin.setPassword("admin")
+        db.session.add(admin)
+        config = Config(-25.)
+        db.session.add(config)
+        db.session.commit()

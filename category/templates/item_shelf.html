@@ -36,7 +36,7 @@ $(document).ready(function () {
 		var that = this;
 		e.preventDefault();
 
-		$.get('getItemInfo', {'item_id': $(this).data('id')}, function(data) {
+		$.get('/category/getItemInfo', {'item_id': $(this).data('id')}, function(data) {
 			$('#itemInfoModal .modal-footer #price').html($(that).data('price'))
 			$('#itemInfoModal .modal-footer #stock').html($(that).data('stock'))
 			$('#itemInfoModal .modal-body').html(data);

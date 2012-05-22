@@ -28,6 +28,10 @@
   </ul>
 </div>
 
+<form class="navbar-search pull-right" action="/searchItem">
+  <input name="q" type="text" placeholder="Search for Item" class="span2 search-query">
+</form>
+
 <div class="nav-collapse">
   <ul class="nav">
     <li {{ 'class=active' if request.path == "/" }}><a href="/">Home</a></li>
