@@ -2,6 +2,8 @@ from database import db, Item, Category, Pricebreak
 from werkzeug import secure_filename
 import os
 
+from thumbnail import prepare_image
+
 from PIL import Image
 
 
@@ -162,8 +164,6 @@ def upload_image(file):
         saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
         saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', filename)
         img = Image.open(saveFilePath)
-        wpercent = (120. / float(img.size[0]))
-        hsize = int((float(img.size[1]) * float(wpercent)))
-        img = img.resize((120, hsize), Image.ANTIALIAS)
-        img.save(saveThumbPath)
+        thumbnail = prepare_image(img, (120, 120))
+        thumbnail.save(saveThumbPath)
     return {'errors': errors, 'image': saveFilePath, 'thumb': saveThumbPath}
