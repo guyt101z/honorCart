@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash, \
@@ -99,7 +99,7 @@ class Item(db.Model):
     category = db.relationship('Category', backref="items")
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
-    pricebreaks = db.relationship('Pricebreak', backref="item", lazy='dynamic')
+    pricebreaks = db.relationship('Pricebreak', backref="item", lazy='joined')
 
     def __init__(self, name, description, price, inStock, picture, category, thumbnail=None):
         self.name = name
