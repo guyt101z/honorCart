@@ -95,18 +95,20 @@ class Item(db.Model):
     price = db.Column(db.Float)
     inStock = db.Column(db.Integer)
     picture = db.Column(db.String(1024))
+    thumbnail = db.Column(db.String(1024))
     category = db.relationship('Category', backref="items")
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
     pricebreaks = db.relationship('Pricebreak', backref="item", lazy='dynamic')
 
-    def __init__(self, name, description, price, inStock, picture, category):
+    def __init__(self, name, description, price, inStock, picture, category, thumbnail=None):
         self.name = name
         self.description = description
         self.price = price
         self.inStock = inStock
         self.picture = picture
         self.category = category
+        self.thumbnail = thumbnail
 
     def __repr__(self):
         return '<Item %r, %r>' % (self.name, self.category)
