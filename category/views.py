@@ -1,7 +1,7 @@
 from category import category_bp
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flaskext.login import login_required, current_user
-from models import get_items
+from models import get_items, get_item
 
 
 @category_bp.route('/category/<int:catid>')
@@ -9,3 +9,10 @@ from models import get_items
 def display_shelf(catid):
 
     return render_template('item_shelf.html', items=get_items(catid))
+
+
+@category_bp.route('/category/getItemInfo')
+@login_required
+def get_item_info_modal_content():
+    item_id = request.args.get('item_id')
+    return render_template('item_info_modal_content.html', item=get_item(item_id))

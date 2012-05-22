@@ -15,9 +15,27 @@
 		</ul>
 	</div>
 </div>
+
+{% include 'item_info_modal.html' %}
+
 <script type="text/javascript">
 $(document).ready(function () {
 	$('.badge').tooltip();
+	$('#itemInfoModal').modal({'show': false});
+
+	$('a.item-info').click(function (e) {
+		var that = this;
+		e.preventDefault();
+
+		$.get('getItemInfo', {'item_id': $(this).data('id')}, function(data) {
+			$('#itemInfoModal .modal-footer #price').html($(that).data('price'))
+			$('#itemInfoModal .modal-footer #stock').html($(that).data('stock'))
+			$('#itemInfoModal .modal-body').html(data);
+			$('#itemInfoModal').modal('show');
+
+		});
+
+	});
 });
 </script>
 {% endblock %}
