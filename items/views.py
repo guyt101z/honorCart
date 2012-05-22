@@ -3,7 +3,7 @@ from flask import render_template, request, flash, redirect, url_for, jsonify
 from flaskext.login import login_required, current_user
 from models import get_categories, validate_item, create_category, create_new_item
 from models import get_items, get_item, update_item_description, get_pricebreaks, update_pricebreaks
-from models import split_form_data, update_item, upload_image
+from models import split_form_data, update_item, upload_image, delete_item
 
 
 @items_bp.route('/addItem', methods=['GET', 'POST'])
@@ -128,3 +128,14 @@ def update_pricebreaks_page():
     update_pricebreaks(request.form.get('id'), pricebreaks)
 
     return jsonify(status='success')
+
+
+@items_bp.route('/modifyItems/delete/<int:itemid>')
+@login_required
+def delete_item_page(itemid):
+    if not current_user.isAdmin():
+        flash(u'<strong>Error!</strong> You don\'t have permission to go there!', 'error')
+        return redirect(url_for('main'))
+
+    delete_item(itemid)
+    return redirect(url_for('.modify_item'))

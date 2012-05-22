@@ -155,6 +155,8 @@ def allowed_file(filename):
 
 def upload_image(file):
     errors = {}
+    saveFilePath = ""
+    saveThumbPath = ""
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         try:
@@ -167,3 +169,9 @@ def upload_image(file):
         thumbnail = prepare_image(img, (120, 120))
         thumbnail.save(saveThumbPath)
     return {'errors': errors, 'image': saveFilePath, 'thumb': saveThumbPath}
+
+
+def delete_item(itemid):
+    item = get_item(itemid)
+    db.session.delete(item)
+    db.session.commit()
