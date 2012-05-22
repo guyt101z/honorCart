@@ -161,6 +161,8 @@ def upload_image(file):
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filename, fileext = os.path.splitext(filename)
+        # File names set to UUID to avoid duplicated image names.
+        # Not fast, but easy here.
         fileUuid = str(uuid.uuid1())
         saveFilePath = os.path.join(UPLOAD_FOLDER, fileUuid + fileext)
         saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', filename + fileext)
