@@ -54,6 +54,16 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/newbie")
+def newbie():
+    return render_template("newbie.html")
+
+
+@app.route("/money")
+def money():
+    return render_template("money.html")
+
+
 @app.route("/rules")
 def daRules():
     print app.url_map

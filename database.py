@@ -2,6 +2,7 @@ from __future__ import with_statement
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 import flask.ext.whooshalchemy
+from whoosh_fix import _get_whoosh_index
 
 from werkzeug.security import generate_password_hash, \
      check_password_hash
@@ -13,6 +14,8 @@ def init_db_app(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataStore.db'
     app.config['WHOOSH_BASE'] = 'search_index'
     db.init_app(app)
+    db.app = app
+
 
 
 class User(db.Model):
