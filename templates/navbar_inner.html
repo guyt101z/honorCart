@@ -24,7 +24,7 @@
 <div class="nav pull-right">
   <ul class="nav">
     <li {{ 'class=active' if request.path == "/addMoney" }}><a href="/addMoney">Balance: </a></li>
-    <li><p class="navbar-text">{{ "$%.2f" % current_user.balance if current_user.username is defined else "$%.2f" % 0 }}</p></li>
+    <li><p class="navbar-text" {{ {'style': 'color: red;'}|xmlattr if current_user.balance < 0 }}>{{ "$%.2f" % current_user.balance if current_user.username is defined else "$%.2f" % 0 }}</p></li>
   </ul>
 </div>
 
