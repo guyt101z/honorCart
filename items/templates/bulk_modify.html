@@ -26,10 +26,12 @@
 			<a href="#" class="btn open-pricebreaks" data-id="{{item.id}}"><i class="icon-th-list"></i></a>
 		</td style="text-align: center;">
 		<td>
-			<a href="#" class="btn delete-item" data-id="{{item.id}}"><i class="icon-trash"></i></a>
+			<a href="#" class="btn delete-item" data-id="{{item.id}}" data-name="{{item.name}}"><i class="icon-trash"></i></a>
 		</td>
 	</tr>
 {% endmacro %}
+
+
 {% block content %}
 <div class="row-fluid">
 	<div class="span5">
@@ -80,6 +82,7 @@
 		</form>
 	</div>
 </div>
+{% include 'confirm_delete_item_modal.html' %}
 {% include 'modal_base.html' %}
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -103,6 +106,20 @@
 				$('#editContentModal #confirm').html("Update Pricebreaks");
 				$('#editContentModal').data('update', 'pricebreaks').modal('show').data('id', $(this).data('id'));
 			});
+		});
+		$('#confirmDeleteModal').bind('show', function() {
+		    var id = $(this).data('id'),
+		        removeBtn = $(this).find('.btn-danger'),
+		        href = removeBtn.attr('href');
+
+		    removeBtn.attr('href', href.replace(/delete\/\d*/, 'delete\/' + id));
+		})
+
+		$('.delete-item').click(function(e) {
+			e.preventDefault();
+			id = $(this).data('id');
+			$('#confirmDeleteModal #delName').html($(this).data('name'));
+			$('#confirmDeleteModal').data('id', id).modal('show');
 		});
 	});
 </script>
