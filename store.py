@@ -5,10 +5,12 @@ import admin
 import settings
 import items
 import category
-
+from global_mail import init_mail
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+init_mail(app)
 
 app.register_blueprint(login.login_bp)
 login.models.init_oid(app)
