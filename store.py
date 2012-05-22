@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, request
 from database import db, Item, Category, init_db_app
 import login
 import admin
@@ -68,6 +68,19 @@ def money():
 def daRules():
     print app.url_map
     return "Printed"
+
+
+@app.route("/getCartDivContents", methods=['POST'])
+def theCart():
+    cart_items = []
+    cart_items.extend(request.json)
+    for dict in cart_items:
+        dict['item'] = get_item(dict.get('id'))
+    return render_template('cart_div_content.html', cart_items=cart_items)
+
+
+def get_item(item_id):
+    return Item.query.filter_by(id=item_id).first()
 
 
 if __name__ == "__main__":

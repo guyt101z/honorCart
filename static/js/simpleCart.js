@@ -605,72 +605,27 @@ function Cart(){
 	};
 
 	me.updateCartView = function() {
-		var newCartCells = [],
-			y,current,header,newCell,info,outputValue,option,headerInfo,itemRow, newRow;
+		var json_text, postData;
+		postData = [];
 
 		me.each(function(item, x) {
-			var headerDiv, headerElement, itemDiv, itemElement;
-			
-			console.log(item);
-
-			if((x) % 3 === 0 || (x)===0) {
-				newRow = document.createElement('div');
-				newRow.className = "itemsRow row";
-				newCartCells.push(newRow);
-
-				headerDiv = document.createElement('div');
-				for(var y=0,ylen = me.cartHeaders.length; y<ylen; y++ ) {
-					headerElement = document.createElement('div');
-					headerInfo = me.cartHeaders[y].split("_");
-
-					headerElement.innerHTML = me.print( headerInfo[0] );
-					headerElement.className = "item" + headerInfo[0];
-					for(var z=1,zlen=headerInfo.length;z<zlen;z++){
-						if( headerInfo[z].toLowerCase() == "noheader" ){
-							headerElement.style.display = "none";
-						}
-					}
-					headerDiv.appendChild( headerElement );
-				}
-				headerDiv.className = "cartCell cartHeaders span2";
-				newRow.appendChild(headerDiv);
-			}
-
-			itemDiv = document.createElement('div');
-			for(var y=0,ylen = me.cartHeaders.length; y<ylen; y++ ){
-				itemElement = document.createElement('div');
-				info = me.cartHeaders[y].split("_");
-			
-				outputValue = me.createCartRow( info , item , outputValue );
-
-				itemElement.innerHTML = outputValue;
-				itemElement.className = "item" + info[0];
-			
-				itemDiv.appendChild( itemElement );
-			}
-			itemDiv.className = "cartCell itemContainer span3";
-			newRow.appendChild(itemDiv);
-			
-
+			var cartItem;
+			cartItem = {'id': item.id, 'qty': item.quantity}
+			postData.push(cartItem);
 
 		});
 
-		for( var x=0,xlen=me.cartDivs.length; x<xlen; x++){
+		json_text = JSON.stringify(postData, null, 2);
 
-			/* delete current rows in div */
-			var div = me.cartDivs[x];
-			if( div.childNodes && div.appendChild ){
-				while( div.childNodes[0] ){
-					div.removeChild( div.childNodes[0] );
-				}
-			
+		$.ajax({url: '/getCartDivContents',
+			type: 'POST',
+			data: json_text,
+			contentType: 'application/json',
+			success: (function(data) {
+				$('div.simpleCart_items').html(data);
+			})
+			});
 
-				for(var j=0, jLen = newCartCells.length; j<jLen; j++){
-					div.appendChild( newCartCells[j] );
-				}
-			}
-
-		}
 	};
 	
 	me.createCartRow = function( info , item , outputValue ){
