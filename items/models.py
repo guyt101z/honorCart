@@ -1,6 +1,7 @@
 from database import db, Item, Category, Pricebreak
 from werkzeug import secure_filename
 import os
+import uuid
 
 from thumbnail import prepare_image
 
@@ -150,7 +151,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def upload_image(file):
@@ -159,12 +160,16 @@ def upload_image(file):
     saveThumbPath = ""
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
+        filename, fileext = os.path.splitext(filename)
+        # File names set to UUID to avoid duplicated image names.
+        # Not fast, but easy here.
+        fileUuid = str(uuid.uuid1())
+        saveFilePath = os.path.join(UPLOAD_FOLDER, fileUuid + fileext)
+        saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', filename + fileext)
         try:
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            file.save(saveFilePath)
         except IOError:
             errors['file'] = "File failed to upload."
-        saveFilePath = os.path.join(UPLOAD_FOLDER, filename)
-        saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', filename)
         img = Image.open(saveFilePath)
         thumbnail = prepare_image(img, (120, 120))
         thumbnail.save(saveThumbPath)
