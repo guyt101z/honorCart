@@ -117,7 +117,7 @@ def update_item_description(id, desc, picture=None):
 def update_pricebreaks(id, pricebreaks):
     item = get_item(id)
     if item:
-        oldPricebreaks = item.pricebreaks.all()
+        oldPricebreaks = item.pricebreaks
         for pricebreak in oldPricebreaks:
             item.pricebreaks.remove(pricebreak)
         for thresh, pct in pricebreaks:

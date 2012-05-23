@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, request, jsonify
 from database import db, Item, Category, init_db_app
 import login
 import admin
@@ -68,6 +68,45 @@ def money():
 def daRules():
     print app.url_map
     return "Printed"
+
+
+@app.route("/getCartDivContents", methods=['POST'])
+def theCart():
+    cart_items = []
+    cart_items.extend(request.json)
+
+    does_not_exist = {}
+    qty_return = {}
+
+    for cart_item in cart_items:
+        item = get_item(cart_item.get('id'))
+        if item:  # Item exists
+            cart_item['item'] = item
+            if item.inStock < cart_item.get('qty_desired'):
+                if not cart_item.get('id') in qty_return:
+                    qty_return[cart_item.get('id')] = {}
+                cart_item['qty_desired'] = item.inStock  # Force qty display to not increment
+                qty_return[cart_item.get('id')] = item.inStock
+            cart_item['subtotal'] = get_price(item.price, cart_item.get('qty_desired'), item.pricebreaks)
+        else:  # Item does not exist
+            print "No Exist"
+            if not cart_item.get('id') in does_not_exist:
+                does_not_exist[cart_item.get('id')] = {}
+            does_not_exist[cart_item.get('id')] = True
+            cart_items.remove(cart_item)  # Remove item so it does not render.
+    return jsonify({'html': render_template('cart_div_content.html', cart_items=cart_items), 'qty_return': qty_return, 'does_not_exist': does_not_exist})
+
+
+def get_item(item_id):
+    return Item.query.filter_by(id=item_id).first()
+
+
+def get_price(price, qty, pricebreaks):
+    pct_off = 0
+    for pb in pricebreaks:
+        if qty >= pb.qty:
+            pct_off = pb.percent
+    return price * ((100 - pct_off) / 100) * qty
 
 
 if __name__ == "__main__":
