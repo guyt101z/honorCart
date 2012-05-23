@@ -610,7 +610,7 @@ function Cart(){
 
 		me.each(function(item, x) {
 			var cartItem;
-			cartItem = {'id': item.id, 'qty': item.quantity}
+			cartItem = {'id': item.id, 'qty_desired': item.quantity};
 			postData.push(cartItem);
 
 		});
@@ -622,7 +622,24 @@ function Cart(){
 			data: json_text,
 			contentType: 'application/json',
 			success: (function(data) {
-				$('div.simpleCart_items').html(data);
+				var item;
+				
+				for (item in data.qty_return) {
+					if (data.qty_return.hasOwnProperty(item)) {
+						if (data.qty_return[item] < me.items[item].quantity) {
+							//flash color in here
+						}
+						me.items[item].quantity = data.qty_return[item];
+					}
+				}
+
+				for(item in data.does_not_exist) {
+					if(data.does_not_exist.hasOwnProperty(item)) {
+						me.items[item].remove();
+					}
+				}
+				$('div.simpleCart_items').html(data.html);
+				$('div.simpleCart_items').show();
 			})
 			});
 

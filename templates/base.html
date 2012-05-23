@@ -143,6 +143,10 @@
         {% else %}
         $('#loginModal').modal({show: false});
         {% endif %}
+        $('a.cart-toggle').click(function (e) {
+          e.preventDefault();
+          $('div.simpleCart_items').toggle();
+        }); 
       });
     </script>
 

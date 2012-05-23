@@ -1,13 +1,26 @@
-<div class="row-fluid well" style="background-color: #aaa; padding: 5px; width: 75%; position: absolute; bottom: -20px; left: 50%; margin-left: -37%;">
-    <a href="#" class="close">x</a>
-    {% for item in cart_items %}
+<div class="row-fluid well" style="background-color: #ddd; padding: 5px; width: 75%; position: absolute; bottom: -20px; left: 50%; margin-left: -37%;">
+    <a href="#" id="close-cart" class="close">x</a>
+    {% for cart_item in cart_items %}
         <div class="span2 well" style="padding: 5px; margin-bottom: 0; text-align: center;">
-            <p><strong>{{item.item.name}}</strong></p>
-            <p>In Cart: {{item.qty}}</p>
-            <p>Subtotal: {{ '$%.2f' % (item.qty|float * item.item.price) }}</p>
-            <span><a href="javascript:;" onClick="simpleCart.items[{{item.id}}].decrement();" class="btn btn-mini badge" style="background-color: inherit;"><i class="icon-minus-sign"></i></a></span>
-            <span><a href="javascript:;" onClick="simpleCart.items[{{item.id}}].remove();" class="btn btn-mini btn-danger badge"><i class="icon-trash"></i></a></span>
-            <span><a href="javascript:;" onClick="simpleCart.items[{{item.id}}].increment();" class="btn btn-mini badge" style="background-color: inherit;"><i class="icon-plus-sign"></i></a></span>
+            <p><strong>{{cart_item.item.name}}</strong></p>
+            <p>In Cart: {{cart_item.qty_desired}}</p>
+            <p>Subtotal: {{ '$%.2f' % cart_item.subtotal }}</p>
+            <span><a href="javascript:;" onClick="simpleCart.items[{{cart_item.id}}].decrement();" class="btn btn-mini badge" style="background-color: inherit;"><i class="icon-minus-sign"></i></a></span>
+            <span><a href="javascript:;" onClick="simpleCart.items[{{cart_item.id}}].remove();" class="btn btn-mini btn-danger badge"><i class="icon-trash"></i></a></span>
+            <span><a href="javascript:;" onClick="simpleCart.items[{{cart_item.id}}].increment();" class="btn btn-mini badge" style="background-color: inherit;"><i class="icon-plus-sign"></i></a></span>
         </div>
     {% endfor %}
+    {% if not cart_items %}
+        <div class="span11 well" style="padding: 5px; margin-bottom: 0; text-align: center;">
+            <p><strong>Empty Cart</strong></p>
+        </div>
+    {% endif %}
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('a#close-cart').click(function (e) {
+          e.preventDefault();
+          $('div.simpleCart_items').toggle();
+        });
+    });
+</script>
