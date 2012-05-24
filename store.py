@@ -6,6 +6,7 @@ import settings
 import items
 import category
 import search
+import checkout
 from global_mail import init_mail
 
 app = Flask(__name__)
@@ -24,6 +25,7 @@ app.register_blueprint(settings.settings_bp)
 app.register_blueprint(items.items_bp)
 app.register_blueprint(category.category_bp)
 app.register_blueprint(search.search_bp)
+app.register_blueprint(checkout.checkout_bp)
 
 
 # dirty hack to get around issues in whoosh

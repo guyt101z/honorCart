@@ -48,7 +48,7 @@ function Cart(){
 	me.shippingRate = 0;
 	me.shippingCost = 0;
 	me.currency = USD;
-	me.checkoutTo = PayPal;
+	me.checkoutTo = Custom;
 	me.email = "";
 	me.merchantId	 = "";
 	me.successUrl = null;
@@ -400,13 +400,36 @@ function Cart(){
 		document.body.removeChild( form );
 	};
 
+	me.getCartJson = function() {
+		var postData, dataString;
+		postData = [];
 
+		me.each(function(item, x) {
+			var cartItem;
+			cartItem = {'id': item.id, 'qty_desired': item.quantity};
+			postData.push(cartItem);
+
+		});
+		dataString = JSON.stringify(postData, null, 2);
+		return dataString;
+	};
 
 	me.emailCheckout = function() {
 		return;
 	};
 
 	me.customCheckout = function() {
+		var postData, dataString;
+		postData = [];
+
+		me.each(function(item, x) {
+			var cartItem;
+			cartItem = {'id': item.id, 'qty_desired': item.quantity};
+			postData.push(cartItem);
+
+		});
+		dataString = JSON.stringify(postData, null, 2);
+
 		return;
 	};
 
