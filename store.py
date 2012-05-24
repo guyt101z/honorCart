@@ -7,13 +7,15 @@ import items
 import category
 import search
 import checkout
+from config import global_config
 from global_mail import init_mail
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
-init_db_app(app)
+global_config(app)
 
+init_db_app(app)
 init_mail(app)
 
 app.register_blueprint(login.login_bp)
