@@ -1,7 +1,9 @@
 Honor Cart
 ==========
 
+This is an honor system shopping cart for physical kiosks.  Right now, it's custom tailored for the LVL1 hackerspace store kiosk, but in the future, it will be more generic.
 
+This thing is entirely unsecure, and requires you to trust your users.
 
 License
 -------
