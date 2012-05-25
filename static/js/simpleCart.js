@@ -419,17 +419,6 @@ function Cart(){
 	};
 
 	me.customCheckout = function() {
-		var postData, dataString;
-		postData = [];
-
-		me.each(function(item, x) {
-			var cartItem;
-			cartItem = {'id': item.id, 'qty_desired': item.quantity};
-			postData.push(cartItem);
-
-		});
-		dataString = JSON.stringify(postData, null, 2);
-
 		return;
 	};
 
@@ -628,17 +617,9 @@ function Cart(){
 	};
 
 	me.updateCartView = function() {
-		var json_text, postData;
-		postData = [];
+		var json_text;
 
-		me.each(function(item, x) {
-			var cartItem;
-			cartItem = {'id': item.id, 'qty_desired': item.quantity};
-			postData.push(cartItem);
-
-		});
-
-		json_text = JSON.stringify(postData, null, 2);
+		json_text = me.getCartJson();
 
 		$.ajax({url: '/getCartDivContents',
 			type: 'POST',
