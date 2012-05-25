@@ -147,6 +147,9 @@
           e.preventDefault();
           $('div.simpleCart_items').toggle();
         }); 
+        {% if current_user.is_anonymous() %}
+          simpleCart.empty();
+        {% endif %}
       });
     </script>
 

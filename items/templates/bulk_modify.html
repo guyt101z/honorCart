@@ -9,7 +9,7 @@
 			<a href="#" class="btn edit-desc" data-id="{{item.id}}"><i class="icon-edit"></i></a>
 		</td>
 		<td>
-			<input type="text" class="input-small" name="{{item.id}}-price" value="{{ '%.2f' % item.price}}">
+			<input type="text" class="input-small" name="{{item.id}}-price" value="{{ '%.2f' % item.price|float }}">
 		</td>
 		<td>
 			<input type="text" name="{{item.id}}-qty" class="input-mini" value="{{item.inStock}}">
@@ -18,7 +18,7 @@
 			<select name="{{item.id}}-categories" id="catSelect">
 				{% if categories %}
 					{% for category in categories %}
-						<option value="{{category.id}}" {{ 'selected' if item.category.id == category.id }}>{{category.name}}</option>
+						<option value="{{category.id}}" {{ 'selected' if item.category_id == category.id }}>{{category.name}}</option>
 					{% endfor %}
 				{% endif %}
 		</td>

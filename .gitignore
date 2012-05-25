@@ -37,3 +37,4 @@ nonces/
 associations/
 static/uploads/
 search_index/
+config.py

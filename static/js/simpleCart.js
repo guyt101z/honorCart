@@ -48,7 +48,7 @@ function Cart(){
 	me.shippingRate = 0;
 	me.shippingCost = 0;
 	me.currency = USD;
-	me.checkoutTo = PayPal;
+	me.checkoutTo = Custom;
 	me.email = "";
 	me.merchantId	 = "";
 	me.successUrl = null;
@@ -400,7 +400,19 @@ function Cart(){
 		document.body.removeChild( form );
 	};
 
+	me.getCartJson = function() {
+		var postData, dataString;
+		postData = [];
 
+		me.each(function(item, x) {
+			var cartItem;
+			cartItem = {'id': item.id, 'qty_desired': item.quantity};
+			postData.push(cartItem);
+
+		});
+		dataString = JSON.stringify(postData, null, 2);
+		return dataString;
+	};
 
 	me.emailCheckout = function() {
 		return;
@@ -605,17 +617,9 @@ function Cart(){
 	};
 
 	me.updateCartView = function() {
-		var json_text, postData;
-		postData = [];
+		var json_text;
 
-		me.each(function(item, x) {
-			var cartItem;
-			cartItem = {'id': item.id, 'qty_desired': item.quantity};
-			postData.push(cartItem);
-
-		});
-
-		json_text = JSON.stringify(postData, null, 2);
+		json_text = me.getCartJson();
 
 		$.ajax({url: '/getCartDivContents',
 			type: 'POST',
