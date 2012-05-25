@@ -45,7 +45,9 @@ def test():
 
 @app.before_request
 def update_categories():
-    g.categories = Category.query.all()
+    cats = Category.query.all()
+    db.session.expunge_all()
+    g.categories = cats
 
 
 @app.route("/")
@@ -91,7 +93,7 @@ def theCart():
                     qty_return[cart_item.get('id')] = {}
                 cart_item['qty_desired'] = item.inStock  # Force qty display to not increment
                 qty_return[cart_item.get('id')] = item.inStock
-            cart_item['subtotal'] = get_price(item.price, cart_item.get('qty_desired'), item.pricebreaks)
+            cart_item['subtotal'] = checkout.models.get_price(item.price, cart_item.get('qty_desired'), item.pricebreaks)
         else:  # Item does not exist
             print "No Exist"
             if not cart_item.get('id') in does_not_exist:
@@ -104,13 +106,6 @@ def theCart():
 def get_item(item_id):
     return Item.query.filter_by(id=item_id).first()
 
-
-def get_price(price, qty, pricebreaks):
-    pct_off = 0
-    for pb in pricebreaks:
-        if qty >= pb.qty:
-            pct_off = pb.percent
-    return price * ((100 - pct_off) / 100) * qty
 
 
 if __name__ == "__main__":

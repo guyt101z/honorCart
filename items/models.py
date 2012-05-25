@@ -9,7 +9,9 @@ from PIL import Image
 
 
 def get_categories():
-    return Category.query.all()
+    cats = Category.query.all()
+    db.session.remove()
+    return cats
 
 
 def create_new_item(name, desc, price, qty, catId, image, pricebreaks, thumb=None):
@@ -75,6 +77,7 @@ def create_category(category):
 
 def is_name_duplicate(name):
     items = Item.query.filter_by(name=name).all()
+    db.session.commit()
     if len(items) == 0:
         return False
     else:
@@ -83,6 +86,7 @@ def is_name_duplicate(name):
 
 def is_category_duplicate(category):
     categories = Category.query.filter_by(name=category).all()
+    db.session.commit()
     if len(categories) == 0:
         return False
     else:
@@ -91,17 +95,23 @@ def is_category_duplicate(category):
 
 def get_items(category=None):
     if category:
-        return Item.query.filter_by(category_id=category).all()
+        item = Item.query.filter_by(category_id=category).all()
+        db.session.commit()
+        return item
     else:
         return Item.query.all()
 
 
 def get_item(id):
-    return Item.query.filter_by(id=id).first()
+    item = Item.query.filter_by(id=id).first()
+    db.session.commit()
+    return item
 
 
 def get_pricebreaks(id):
-    return Item.query.filter_by(id=id).first().pricebreaks
+    breaks = Item.query.filter_by(id=id).first().pricebreaks
+    db.session.commit()
+    return breaks
 
 
 def update_item_description(id, desc, picture=None):
@@ -141,8 +151,9 @@ def update_item(id, name, price, qty, catId):
     item.name = name
     item.price = price
     item.inStock = qty
-    item.category = Category.query.filter_by(id=catId).first()
-    db.session.add(item)
+    if float(catId) != item.category_id:
+        cat = Category.query.filter_by(id=catId).first()
+        item.category = cat
     db.session.commit()
 
 UPLOAD_FOLDER = 'static/uploads/'

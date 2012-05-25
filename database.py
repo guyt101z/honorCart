@@ -1,8 +1,6 @@
 from __future__ import with_statement
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-import flask.ext.whooshalchemy
-from whoosh_fix import _get_whoosh_index
 
 from werkzeug.security import generate_password_hash, \
      check_password_hash
@@ -97,7 +95,6 @@ class Config(db.Model):
 
 
 class Item(db.Model):
-    __searchable__ = ['name', 'description']
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
@@ -106,10 +103,10 @@ class Item(db.Model):
     inStock = db.Column(db.Integer)
     picture = db.Column(db.String(1024))
     thumbnail = db.Column(db.String(1024))
-    category = db.relationship('Category', backref="items")
+    category = db.relationship('Category')
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
-    pricebreaks = db.relationship('Pricebreak', backref="item", lazy='joined')
+    pricebreaks = db.relationship('Pricebreak', backref="item", lazy='select')
 
     def __init__(self, name, description, price, inStock, picture, category, thumbnail=None):
         self.name = name
