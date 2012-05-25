@@ -4,6 +4,10 @@ from flaskext.login import login_required, current_user
 from flask import json
 from models import get_item, get_price, get_total, checkout_cart, take_money
 
+try:
+    from login.models import login_manager
+except ImportError:
+    login_manager = None
 
 @checkout_bp.route('/checkout', methods=['POST'])
 @login_required
@@ -25,4 +29,8 @@ def checkout_do():
         for cart_item in shopping_cart:
             checkout_cart(shopping_cart)
             # Need to handle errors here
+
+    if login_manager:
+        login_manager.reload_user()
+
     return render_template('checkout_complete.html')
