@@ -627,13 +627,16 @@ function Cart(){
 			contentType: 'application/json',
 			success: (function(data) {
 				var item;
+
+				$('div.simpleCart_items').html(data.html);
 				
 				for (item in data.qty_return) {
 					if (data.qty_return.hasOwnProperty(item)) {
 						if (data.qty_return[item] < me.items[item].quantity) {
-							//flash color in here
+							$("div.cart-item#item-" + item + " p.in-cart").stop().css("background-color", "#FF0000").animate({ backgroundColor: "#FFFFFF"}, 2500);
 						}
 						me.items[item].quantity = data.qty_return[item];
+						me.save();
 					}
 				}
 
@@ -642,7 +645,7 @@ function Cart(){
 						me.items[item].remove();
 					}
 				}
-				$('div.simpleCart_items').html(data.html);
+				
 				$('div.simpleCart_items').show();
 			})
 			});

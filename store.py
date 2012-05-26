@@ -81,6 +81,8 @@ def theCart():
     cart_items = []
     cart_items.extend(request.json)
 
+    print cart_items
+
     does_not_exist = {}
     qty_return = {}
 
