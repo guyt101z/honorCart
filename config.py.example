@@ -4,3 +4,8 @@ def global_config(app):
     app.config['MAIL_USERNAME'] = '<YOUR MAIL SERVER USERNAME>'
     app.config['MAIL_PASSWORD'] = '<YOUR MAIL SERVER PASSWORD>'
     app.config['DEFAULT_MAIL_SENDER'] = '<DEFAULT SENDFROM ADDRESS>'
+
+
+API_UserName = "<YOUR PAYPAL API USER ID>"
+API_Password = "<YOUR PAYPAL API PASSWORD>"
+API_Signature = "<YOUR PAYPAL API SIGNATURE>"

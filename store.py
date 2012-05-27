@@ -7,6 +7,7 @@ import items
 import category
 import search
 import checkout
+import add_money
 from config import global_config
 from global_mail import init_mail
 
@@ -28,6 +29,7 @@ app.register_blueprint(items.items_bp)
 app.register_blueprint(category.category_bp)
 app.register_blueprint(search.search_bp)
 app.register_blueprint(checkout.checkout_bp)
+app.register_blueprint(add_money.add_money_bp)
 
 
 # dirty hack to get around issues in whoosh
