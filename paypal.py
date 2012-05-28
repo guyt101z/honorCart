@@ -7,9 +7,7 @@ import StringIO
 PROXY_HOST = '127.0.0.1'
 PROXY_PORT = 808
 
-SandboxFlag = True
-
-from config import API_UserName, API_Password, API_Signature
+from config import API_UserName, API_Password, API_Signature, SandboxFlag
 
 sBNCode = "PP-ECWizard"
 
