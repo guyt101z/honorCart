@@ -1,7 +1,7 @@
 from add_money import add_money_bp
 from flask import render_template, request, redirect, url_for, flash, make_response
 from flaskext.login import login_required, current_user
-from models import validate_float
+from models import validate_float, add_to_user_balance
 
 from urllib import unquote_plus
 from paypal import SetExpressCheckoutDG, GetExpressCheckoutDetails
@@ -94,8 +94,7 @@ def confirm():
 
         reasonCode = resArray["PAYMENTINFO_0_REASONCODE"]
         
-        current_user.balance += float(amt)
-        print current_user
+        add_to_user_balance(current_user.id, float(amt))
 
         flash('Payment Successful!', 'success')
         return render_template('confirm.html', paymentfailure=False)
