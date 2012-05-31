@@ -1,6 +1,6 @@
 from login import login_bp
 from flask import g
-from flaskext.openid import OpenID
+from flaskopenid import OpenID
 from flaskext.login import LoginManager
 from database import db, User
 

@@ -42,6 +42,8 @@
     </div>
   </form>
 </div>
+<iframe height=0 width=0 id="googleLogout" src="{{ 'https://www.google.com/accounts/Logout' if not current_user.is_authenticated() }}"></iframe>
+<iframe height=0 width=0 id="yahooLogout" src="{{ 'https://login.yahoo.com/config/login?logout=1' if not current_user.is_authenticated() }}"></iframe>
 <script type="text/javascript">
   $('#google').click(function () {
     var input = $("<input>").attr("type", "hidden").attr("name", "openid").val("https://www.google.com/accounts/o8/id");
