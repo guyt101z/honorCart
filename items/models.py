@@ -1,7 +1,9 @@
+from __future__ import with_statement
 from database import db, Item, Category, Pricebreak
 from werkzeug import secure_filename
 import os
 import uuid
+
 
 from thumbnail import prepare_image
 
@@ -185,6 +187,23 @@ def upload_image(file):
         thumbnail = prepare_image(img, (120, 120))
         thumbnail.save(saveThumbPath)
     return {'errors': errors, 'image': saveFilePath, 'thumb': saveThumbPath}
+
+
+def update_image(filename, data, id):
+    iname, iext = os.path.splitext(filename)
+    ofile = secure_filename(str(uuid.uuid1()) + iext)
+    saveFilePath = os.path.join(UPLOAD_FOLDER, ofile)
+    saveThumbPath = os.path.join(UPLOAD_FOLDER, 'thumbs', ofile)
+    with open(saveFilePath, 'wb') as f:
+        f.write(data)
+    img = Image.open(saveFilePath)
+    thumbnail = prepare_image(img, (120, 120))
+    thumbnail.save(saveThumbPath)
+    item = get_item(id)
+    item.picture = saveFilePath
+    item.thumbnail = saveThumbPath
+    db.session.commit()
+    return (saveFilePath, saveThumbPath)
 
 
 def delete_item(itemid):

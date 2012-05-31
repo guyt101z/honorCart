@@ -3,7 +3,7 @@ from flask import render_template, request, flash, redirect, url_for, jsonify
 from flaskext.login import login_required, current_user
 from models import get_categories, validate_item, create_category, create_new_item
 from models import get_items, get_item, update_item_description, get_pricebreaks, update_pricebreaks
-from models import split_form_data, update_item, upload_image, delete_item
+from models import split_form_data, update_item, upload_image, delete_item, update_image
 
 
 @items_bp.route('/addItem', methods=['GET', 'POST'])
@@ -139,3 +139,10 @@ def delete_item_page(itemid):
 
     delete_item(itemid)
     return redirect(url_for('.modify_item'))
+
+
+@items_bp.route('/modifyItems/uploadImage', methods=['POST'])
+@login_required
+def upload_new_image():
+    return_name, thumb_name = update_image(request.args.get('qqfile'), request.data, id=request.args.get('id'))
+    return jsonify(success=True, filename=thumb_name)

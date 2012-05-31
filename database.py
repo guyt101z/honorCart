@@ -15,7 +15,6 @@ def init_db_app(app):
     db.app = app
 
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))

@@ -1,6 +1,6 @@
 <div class="preview">
 	<h4>Preview:</h4>
-	<p>
+	<p id="imgPreview">
 	{% if item.picture %}
 		<img src="{{item.picture}}" alt="">
 	{% else %}
@@ -20,10 +20,25 @@
 				<label for="desc" class="control-label">Desciption: </label>
 				<div class="controls"><textarea name="desc" id="desc" cols="30" rows="10">{{item.description}}</textarea></div>
 			</div>
-			<div class="control-group">
-				<label for="picture" class="control-label">Upload a Picture: </label>
-				<div class="controls"><input type="file" name="picture"></div>
-			</div>
 		</fieldset>
 	</form>
+	<div id="file-uploader">
+	    <noscript>
+	        <p>Please enable JavaScript to use file uploader.</p>
+	        <!-- or put a simple form for upload here -->
+	    </noscript>
+	</div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var uploader = new qq.FileUploader({
+			element: document.getElementById('file-uploader'),
+			params: {'id': {{item.id}}},
+			action: '/modifyItems/uploadImage',
+			debug: true,
+			onComplete: function(id, fileName, responseJSON){
+				$('#imgPreview').html('<img src="' + responseJSON.filename + '">');
+			}
+		});
+	});
+</script>	
