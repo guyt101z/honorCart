@@ -3,7 +3,7 @@ from global_mail import mail, Message
 
 
 def get_items(category):
-    return Item.query.filter_by(category_id=category).all()
+    return Item.query.filter_by(category_id=category).filter(Item.inStock > 0).all()
 
 
 def get_item(itemid):
