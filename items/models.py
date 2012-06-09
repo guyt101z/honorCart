@@ -97,9 +97,8 @@ def is_category_duplicate(category):
 
 def get_items(category=None):
     if category:
-        item = Item.query.filter_by(category_id=category).all()
-        db.session.commit()
-        return item
+        items = Item.query.filter_by(category_id=category).all()
+        return items
     else:
         return Item.query.all()
 
