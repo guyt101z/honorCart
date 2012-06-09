@@ -6,7 +6,7 @@
         {% else %}
             <div><img src="/static/img/placeholder.jpg" alt=""></div>
         {% endif %}
-		<div class=""><strong>{{item.name}}</strong></div>
+		<div class="shelfItemName"><strong>{{item.name}}</strong></div>
 		<div class="">{{'$%.2f' % item.price|float }}</div>
 		<div class="">In Stock: {{item.inStock}}</div>
 	</div>

@@ -8,6 +8,11 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
+.shelfItemName {
+  height: 36px;
+  overflow: hidden;
+}
+
 article,
 aside,
 details,
